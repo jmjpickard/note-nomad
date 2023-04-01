@@ -1,0 +1,21 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.NavTitle {
+  font-size: 30px;
+  color: white;
+  font-weight: 600;
+  word-spacing: 5px;
+  letter-spacing: 3px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
