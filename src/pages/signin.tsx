@@ -44,9 +44,8 @@ const SignIn: NextPage = ({ providers }: SignInProps) => {
 SignIn.getInitialProps = async (context): Promise<SignInProps> => {
   const { req, res } = context;
   const session = await getSession({ req });
-  console.log({ session });
   if (session && res) {
-    res.writeHead(302, { Location: "/" });
+    res.writeHead(302, { Location: "/notes" });
     res.end();
     return {
       session,

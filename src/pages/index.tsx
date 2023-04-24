@@ -2,12 +2,9 @@ import styles from "./index.module.css";
 import { type NextPage } from "next";
 import Head from "next/head";
 import React from "react";
-import { AuthShowcase } from "./components/Login";
-
 import { api } from "~/utils/api";
 import { NavBar } from "./components/Nav/Nav";
 import { WelcomeText } from "./components/WelcomeText/WelcomeText";
-import LoginButton from "./components/LoginButton/LoginButton";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "james" });

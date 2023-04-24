@@ -1,0 +1,136 @@
+.calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.topDisplay {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+  color: #6aaeb2;
+  font-weight: bold;
+}
+
+.arrowContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  color: white;
+  background-color: #a9cbcd;
+  width: 25px;
+  height: 25px;
+}
+
+.arrow:hover {
+  background-color: #6aaeb2;
+}
+
+.weekDaysContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.weekDay {
+  font-size: 13px;
+  flex: 0 0 14.2%;
+  text-align: left;
+  color: #c5cbd3;
+}
+
+.dayContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.day {
+  cursor: pointer;
+  text-align: center;
+  height: 22px;
+  width: 24px;
+  color: #6aaeb2;
+  border-radius: 50%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.day:hover {
+  background-color: #d9dbda;
+  color: white;
+}
+
+.topRow {
+  text-align: center;
+  height: 22px;
+  width: 24px;
+  color: #6aaeb2;
+}
+.topRow:hover {
+  background-color: #d9dbda;
+  color: white;
+}
+
+.selected {
+  background-color: #b0dbdd;
+  color: white;
+}
+.selected:hover {
+  background-color: #85acae;
+  color: white;
+}
+
+.booked:hover {
+  background-color: white;
+  color: #85acae;
+}
+
+.dayContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.dayNumber {
+  padding-left: 3px;
+}
+
+.bookedDay {
+  height: 25%;
+  padding: 0;
+  margin-left: -1px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.jack {
+  background-color: #34a0d1;
+}
+
+.charlie {
+  background-color: #3cbe61;
+}
+
+.lily {
+  background-color: #f862e8;
+}
+
+.mumAndDad {
+  background-color: #f86262;
+}
