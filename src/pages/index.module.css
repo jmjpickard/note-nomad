@@ -31,7 +31,6 @@
   gap: 35px;
   align-items: flex-start;
   justify-content: flex-start;
-  text-align: center;
   padding-top: 100px;
 }
 
@@ -43,6 +42,9 @@
   gap: 20px;
   width: 90%;
   height: 80vh;
+}
+.editor {
+  width: 100%;
 }
 .dayTitle {
   color: white;

@@ -1,0 +1,31 @@
+.todoList {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.todoItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.checkboxInput {
+  margin-right: 10px;
+}
+
+.textInput {
+  flex-grow: 1;
+  padding: 8px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  outline: none;
+  font-size: 16px;
+}
+
+.textInput.completed {
+  text-decoration: line-through;
+  color: #aaa;
+}

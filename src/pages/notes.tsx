@@ -1,5 +1,7 @@
+import { TextEditor } from "./components/Editor/TextEditor";
 import { NavBar } from "./components/Nav/Nav";
 import { DaysProps, SideCalendar } from "./components/NewCalendar/Calendar";
+import TodoList from "./components/Todos/Todos";
 import styles from "./index.module.css";
 import React from "react";
 
@@ -42,8 +44,16 @@ const Notes = () => {
         <div className={styles.markdownContainer}>
           <div className={styles.dayTitle}>{getDayString(selectedDay)}</div>
           <div className={styles.markdownContent}>
-            <div className={styles.markdownItem}>Todos</div>
-            <div className={styles.markdownItem}>Notes</div>
+            <div className={styles.markdownItem}>
+              <div>Todos</div>
+              <TodoList />
+            </div>
+            <div className={styles.markdownItem}>
+              <div>Notes</div>
+              <div className={styles.editor}>
+                <TextEditor />
+              </div>
+            </div>
           </div>
         </div>
       </div>
