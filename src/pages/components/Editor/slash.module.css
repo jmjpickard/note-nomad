@@ -1,0 +1,22 @@
+.slashGroup {
+  background-color: #a9cbcd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 3px;
+  width: 10rem;
+}
+
+.slashItem {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  padding: 7px 10px;
+}
+
+.slashItem:hover {
+  background-color: #d3e0e1;
+  cursor: pointer;
+  border-radius: 3px;
+}

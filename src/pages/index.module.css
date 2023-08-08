@@ -45,7 +45,10 @@
 }
 .editor {
   width: 100%;
+  outline: none;
+  margin-left: 5px;
 }
+
 .dayTitle {
   color: white;
   font-size: 20px;

@@ -2,13 +2,10 @@ import styles from "./index.module.css";
 import { type NextPage } from "next";
 import Head from "next/head";
 import React from "react";
-import { api } from "~/utils/api";
 import { NavBar } from "./components/Nav/Nav";
 import { WelcomeText } from "./components/WelcomeText/WelcomeText";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "james" });
-
   return (
     <>
       <Head>

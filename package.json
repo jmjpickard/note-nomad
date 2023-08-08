@@ -29,6 +29,7 @@
     "@trpc/react-query": "^10.9.0",
     "@trpc/server": "^10.9.0",
     "classnames": "^2.3.2",
+    "cuid": "^3.0.0",
     "moment": "^2.29.4",
     "next": "^13.2.1",
     "next-auth": "^4.19.0",

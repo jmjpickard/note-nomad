@@ -1,4 +1,9 @@
-import { defaultValueCtx, Editor, rootCtx } from "@milkdown/core";
+import {
+  defaultValueCtx,
+  Editor,
+  editorViewOptionsCtx,
+  rootCtx,
+} from "@milkdown/core";
 import type { FC } from "react";
 
 import { commonmark } from "@milkdown/preset-commonmark";
@@ -13,13 +18,7 @@ import { slash, SlashView } from "./Slash";
 
 import "@milkdown/theme-nord/style.css";
 
-const markdown = `# Milkdown React Slash
-
-> You're scared of a world where you're needed.
-
-This is a demo for using Milkdown with **React**.
-
-Type \`/\` to see the slash command.`;
+const markdown = `Type \`/\` to see the slash command.`;
 
 export const MilkdownEditor: FC = () => {
   const pluginViewFactory = usePluginViewFactory();
@@ -34,6 +33,13 @@ export const MilkdownEditor: FC = () => {
             component: SlashView,
           }),
         });
+        ctx.update(editorViewOptionsCtx, (prev) => ({
+          ...prev,
+          attributes: {
+            class: "editorMain",
+            spellcheck: "false",
+          },
+        }));
       })
       .config(nord)
       .use(commonmark)

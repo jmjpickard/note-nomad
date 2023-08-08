@@ -1,9 +1,11 @@
+import { useSession } from "next-auth/react";
 import { TextEditor } from "./components/Editor/TextEditor";
 import { NavBar } from "./components/Nav/Nav";
 import { DaysProps, SideCalendar } from "./components/NewCalendar/Calendar";
 import TodoList from "./components/Todos/Todos";
 import styles from "./index.module.css";
 import React from "react";
+import { api } from "~/utils/api";
 
 const nth = function (d: number) {
   if (d > 3 && d < 21) return "th";
@@ -28,11 +30,19 @@ const getDayString = (date: Date) => {
   return `${day}${endStr}`;
 };
 
+const dateOnly = (date: Date) =>
+  new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
 const Notes = () => {
-  const [selectedDay, setSelectedDay] = React.useState<Date>(new Date());
+  const [selectedDay, setSelectedDay] = React.useState<Date>(
+    dateOnly(new Date())
+  );
   const handleDayClick = (day: DaysProps) => {
-    setSelectedDay(new Date(day.date));
+    setSelectedDay(dateOnly(new Date(day.date)));
   };
+  const { data: todos, isLoading: todosLoading } =
+    api.todo.getTodosByUserIdAndDate.useQuery({ date: selectedDay });
+
   return (
     <div className={styles.notesMain}>
       <NavBar />
@@ -46,7 +56,11 @@ const Notes = () => {
           <div className={styles.markdownContent}>
             <div className={styles.markdownItem}>
               <div>Todos</div>
-              <TodoList />
+              <TodoList
+                selectedDate={selectedDay}
+                data={todos}
+                loading={todosLoading}
+              />
             </div>
             <div className={styles.markdownItem}>
               <div>Notes</div>
