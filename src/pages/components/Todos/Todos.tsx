@@ -28,7 +28,6 @@ const TodoList: React.FC<TodoListProps> = ({
   const session = useSession();
 
   const [todos, setTodos] = React.useState<Todos[]>([]);
-  const [focusIndex, setFocusIndex] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     if (data) {
@@ -55,6 +54,7 @@ const TodoList: React.FC<TodoListProps> = ({
   const deleteTodo = api.todo.deleteTodo.useMutation();
 
   const inputRefs = React.useRef<HTMLInputElement[]>([]);
+  const [focusIndex, setFocusIndex] = React.useState<number | null>(null);
   React.useEffect(() => {
     if (focusIndex !== null && inputRefs.current[focusIndex]) {
       inputRefs.current[focusIndex]?.focus();
