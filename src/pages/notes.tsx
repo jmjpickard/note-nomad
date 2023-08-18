@@ -6,6 +6,7 @@ import TodoList from "./components/Todos/Todos";
 import styles from "./index.module.css";
 import React from "react";
 import { api } from "~/utils/api";
+import { PriorityQueueProvider } from "./components/QueueContext/PriorityQueueContext";
 
 const nth = function (d: number) {
   if (d > 3 && d < 21) return "th";
@@ -37,41 +38,49 @@ const Notes = () => {
   const [selectedDay, setSelectedDay] = React.useState<Date>(
     dateOnly(new Date())
   );
+
+  const {
+    data: todos,
+    isLoading: todosLoading,
+    refetch,
+  } = api.todo.getTodosByUserIdAndDate.useQuery({ date: selectedDay });
+
   const handleDayClick = (day: DaysProps) => {
     setSelectedDay(dateOnly(new Date(day.date)));
+    refetch();
   };
-  const { data: todos, isLoading: todosLoading } =
-    api.todo.getTodosByUserIdAndDate.useQuery({ date: selectedDay });
 
   return (
-    <div className={styles.notesMain}>
-      <NavBar />
-      <div className={styles.notesContainer}>
-        <SideCalendar
-          onEventClick={(day) => handleDayClick(day)}
-          selectedDay={selectedDay}
-        />
-        <div className={styles.markdownContainer}>
-          <div className={styles.dayTitle}>{getDayString(selectedDay)}</div>
-          <div className={styles.markdownContent}>
-            <div className={styles.markdownItem}>
-              <div>Todos</div>
-              <TodoList
-                selectedDate={selectedDay}
-                data={todos}
-                loading={todosLoading}
-              />
-            </div>
-            <div className={styles.markdownItem}>
-              <div>Notes</div>
-              <div className={styles.editor}>
-                <TextEditor />
+    <PriorityQueueProvider>
+      <div className={styles.notesMain}>
+        <NavBar />
+        <div className={styles.notesContainer}>
+          <SideCalendar
+            onEventClick={(day) => handleDayClick(day)}
+            selectedDay={selectedDay}
+          />
+          <div className={styles.markdownContainer}>
+            <div className={styles.dayTitle}>{getDayString(selectedDay)}</div>
+            <div className={styles.markdownContent}>
+              <div className={styles.markdownItem}>
+                <div>Todos</div>
+                <TodoList
+                  selectedDate={selectedDay}
+                  data={todos}
+                  loading={todosLoading}
+                />
+              </div>
+              <div className={styles.markdownItem}>
+                <div>Notes</div>
+                <div className={styles.editor}>
+                  <TextEditor />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </PriorityQueueProvider>
   );
 };
 
