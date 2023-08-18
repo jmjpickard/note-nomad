@@ -28,10 +28,11 @@ const TodoList: React.FC<TodoListProps> = ({
   const session = useSession();
 
   const [todos, setTodos] = React.useState<Todos[]>([]);
+  const [focusIndex, setFocusIndex] = React.useState<number | null>(null);
+
   React.useEffect(() => {
     if (data) {
       if (data.length === 0) {
-        console.log("empty");
         setTodos([
           {
             id: cuid(),
@@ -50,11 +51,15 @@ const TodoList: React.FC<TodoListProps> = ({
     }
   }, [data]);
 
-  console.log({ queue, todos });
-
   const upsertTodo = api.todo.upsertTodo.useMutation();
+  const deleteTodo = api.todo.deleteTodo.useMutation();
 
   const inputRefs = React.useRef<HTMLInputElement[]>([]);
+  React.useEffect(() => {
+    if (focusIndex !== null && inputRefs.current[focusIndex]) {
+      inputRefs.current[focusIndex]?.focus();
+    }
+  }, [focusIndex, inputRefs.current]);
 
   const handleCheckboxChange = async (id: string) => {
     const todo = todos.find((todo) => todo.id === id);
@@ -75,28 +80,38 @@ const TodoList: React.FC<TodoListProps> = ({
   };
 
   const onInactive = async () => {
-    console.log("hello", length);
     if (length === 0) {
       return;
     }
     const todo = dequeue();
     if (todo) {
-      try {
-        if (todo.action === "upsert") {
-          const updatedTodo = await upsertTodo.mutateAsync({
-            id: todo.id,
-            title: todo.title,
-            date: todo.date,
-            content: todo.content ?? "",
-            done: todo.done,
-          });
-          const newTodos = todos.map((todo) =>
-            todo.id === updatedTodo.id ? updatedTodo : todo
-          );
-          setTodos(newTodos);
-        }
-      } catch (err) {
-        console.log(err);
+      switch (todo.action) {
+        case "upsert":
+          try {
+            const updatedTodo = await upsertTodo.mutateAsync({
+              id: todo.id,
+              title: todo.title,
+              date: todo.date,
+              content: todo.content ?? "",
+              done: todo.done,
+            });
+            const newTodos = todos.map((todo) =>
+              todo.id === updatedTodo.id ? updatedTodo : todo
+            );
+            setTodos(newTodos);
+          } catch (err) {
+            console.log(err);
+          }
+          break;
+        case "delete":
+          try {
+            await deleteTodo.mutateAsync({
+              id: todo.id,
+            });
+          } catch (err) {
+            console.log(err);
+          }
+          break;
       }
     }
   };
@@ -128,6 +143,7 @@ const TodoList: React.FC<TodoListProps> = ({
     index: number
   ) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       const todo = todos.find((todo) => todo.id === id);
       if (todo) {
         const updatedTodo = { ...todo, content: e.currentTarget.value };
@@ -143,6 +159,7 @@ const TodoList: React.FC<TodoListProps> = ({
           index: length + 1,
         });
         if (index === todos.length - 1) {
+          setFocusIndex(index + 1);
           setTodos((todos) => [
             ...todos,
             {
@@ -157,7 +174,20 @@ const TodoList: React.FC<TodoListProps> = ({
             },
           ]);
         }
-        inputRefs.current[index + 1]?.focus();
+      }
+    }
+    if (e.key === "Backspace") {
+      if (e.currentTarget.value.length === 0) {
+        setTodos(todos.filter((t) => t.id !== id));
+        setFocusIndex(index - 1);
+        const todo = todos.find((todo) => todo.id === id);
+        if (todo) {
+          enqueue({
+            action: "delete",
+            ...todo,
+            index: length + 1,
+          });
+        }
       }
     }
   };
