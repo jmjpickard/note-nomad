@@ -1,12 +1,12 @@
 import { useSession } from "next-auth/react";
-import { TextEditor } from "./components/Editor/TextEditor";
-import { NavBar } from "./components/Nav/Nav";
-import { DaysProps, SideCalendar } from "./components/NewCalendar/Calendar";
-import TodoList from "./components/Todos/Todos";
+import { TextEditor } from "../components/Editor/TextEditor";
+import { NavBar } from "../components/Nav/Nav";
+import { DaysProps, SideCalendar } from "../components/NewCalendar/Calendar";
+import TodoList from "../components/Todos/Todos";
 import styles from "./index.module.css";
 import React from "react";
 import { api } from "~/utils/api";
-import { PriorityQueueProvider } from "./components/QueueContext/PriorityQueueContext";
+import { PriorityQueueProvider } from "../components/QueueContext/PriorityQueueContext";
 
 const nth = function (d: number) {
   if (d > 3 && d < 21) return "th";

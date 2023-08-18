@@ -12,7 +12,7 @@ import { BuiltInProviderType } from "next-auth/providers";
 import { Session } from "next-auth";
 
 import styles from "./index.module.css";
-import { NavBar } from "./components/Nav/Nav";
+import { NavBar } from "../components/Nav/Nav";
 
 interface SignInProps {
   providers?: Record<
