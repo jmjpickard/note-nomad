@@ -45,9 +45,9 @@ const Notes = () => {
     refetch,
   } = api.todo.getTodosByUserIdAndDate.useQuery({ date: selectedDay });
 
-  const handleDayClick = (day: DaysProps) => {
+  const handleDayClick = async (day: DaysProps) => {
     setSelectedDay(dateOnly(new Date(day.date)));
-    refetch();
+    await refetch();
   };
 
   return (

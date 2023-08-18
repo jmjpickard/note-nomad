@@ -25,7 +25,7 @@ export const SlashView = () => {
       if (loading) return;
       get().action(fn);
     },
-    [loading]
+    [loading, get]
   );
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export const SlashView = () => {
     slashProvider.current = new SlashProvider({
       content: div,
       tippyOptions: {
-        onMount: (_) => {
+        onMount: () => {
           (ref.current?.children[0] as HTMLButtonElement).focus();
         },
       },
@@ -60,10 +60,10 @@ export const SlashView = () => {
     e.preventDefault(); // Prevent the keyboad key to be inserted in the editor.
     action((ctx) => {
       const view = ctx.get(editorViewCtx);
-      const { dispatch, state } = view;
+      const { state } = view;
       const { tr, selection } = state;
       const { from } = selection;
-      dispatch(tr.deleteRange(from - 1, from));
+      view.dispatch(tr.deleteRange(from - 1, from));
       view.focus();
       switch (type) {
         case "heading1":

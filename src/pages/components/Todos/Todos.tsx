@@ -61,7 +61,7 @@ const TodoList: React.FC<TodoListProps> = ({
     }
   }, [focusIndex, inputRefs.current]);
 
-  const handleCheckboxChange = async (id: string) => {
+  const handleCheckboxChange = (id: string) => {
     const todo = todos.find((todo) => todo.id === id);
     if (todo) {
       const updatedTodo = { ...todo, done: !todo.done };
@@ -196,13 +196,13 @@ const TodoList: React.FC<TodoListProps> = ({
     <div className={styles.todoList}>
       <InactivityTrigger
         timeout={500}
-        onInactive={async () => await onInactive()}
+        onInactive={() => async () => await onInactive()}
       />
       {loading && <div>Loading...</div>}
       {todos.map((todo, index) => (
         <div className={styles.todoItem} key={todo.id}>
           <div className={styles.checkContainer}>
-            <input type="checkbox" checked={todo.done} onChange={() => {}} />
+            <input type="checkbox" checked={todo.done} />
             <span
               className={styles.checkmark}
               onClick={() => handleCheckboxChange(todo.id)}
