@@ -63,7 +63,7 @@ const Notes = () => {
             <div className={styles.dayTitle}>{getDayString(selectedDay)}</div>
             <div className={styles.markdownContent}>
               <div className={styles.markdownItem}>
-                <div>Todos</div>
+                <div>Your todos</div>
                 <TodoList
                   selectedDate={selectedDay}
                   data={todos}
