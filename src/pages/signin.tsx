@@ -24,6 +24,12 @@ interface SignInProps {
 }
 
 const SignIn: NextPage = ({ providers }: SignInProps) => {
+  const handleSignIn = (providerId: string) => {
+    signIn(providerId).catch((error) => {
+      console.error("Sign-in error:", error);
+    });
+  };
+
   return (
     <main className={styles.main}>
       <NavBar />
@@ -31,7 +37,7 @@ const SignIn: NextPage = ({ providers }: SignInProps) => {
         {providers &&
           Object.values(providers).map((provider) => (
             <div key={provider.name} className={styles.signInButton}>
-              <a onClick={() => async () => await signIn(provider.id)}>
+              <a onClick={() => handleSignIn(provider.id)}>
                 Sign in with {provider.name}
               </a>
             </div>
