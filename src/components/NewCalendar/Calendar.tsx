@@ -10,7 +10,7 @@ export interface DaysProps {
 }
 
 interface CalendarProps {
-  onEventClick: (day: DaysProps) => Promise<void>;
+  onEventClick: (day: DaysProps) => void;
   selectedDay: Date;
 }
 
@@ -74,8 +74,8 @@ export const SideCalendar: React.FC<CalendarProps> = ({
     setDays(buildDays(diff, firstOfMonth, selectedDay));
   };
 
-  const handleDayClick = async (day: DaysProps) => {
-    await onEventClick(day);
+  const handleDayClick = (day: DaysProps) => {
+    onEventClick(day);
 
     setDays(
       days.map((d) => {
@@ -117,7 +117,7 @@ export const SideCalendar: React.FC<CalendarProps> = ({
               <Day
                 day={day}
                 topRow={idx < 7}
-                onClick={(day) => async () => await handleDayClick(day)}
+                onClick={(day) => handleDayClick(day)}
               />
             </React.Fragment>
           );

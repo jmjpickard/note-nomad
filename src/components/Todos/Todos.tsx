@@ -79,38 +79,49 @@ const TodoList: React.FC<TodoListProps> = ({
     }
   };
 
-  const onInactive = async () => {
+  const onInactive = () => {
     if (length === 0) {
       return;
     }
+
     const todo = dequeue();
+
     if (todo) {
+      const handleUpsert = async () => {
+        try {
+          const updatedTodo = await upsertTodo.mutateAsync({
+            id: todo.id,
+            title: todo.title,
+            date: todo.date,
+            content: todo.content ?? "",
+            done: todo.done,
+          });
+
+          const newTodos = todos.map((existingTodo) =>
+            existingTodo.id === updatedTodo.id ? updatedTodo : existingTodo
+          );
+          setTodos(newTodos);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      const handleDelete = async () => {
+        try {
+          await deleteTodo.mutateAsync({
+            id: todo.id,
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
       switch (todo.action) {
         case "upsert":
-          try {
-            const updatedTodo = await upsertTodo.mutateAsync({
-              id: todo.id,
-              title: todo.title,
-              date: todo.date,
-              content: todo.content ?? "",
-              done: todo.done,
-            });
-            const newTodos = todos.map((todo) =>
-              todo.id === updatedTodo.id ? updatedTodo : todo
-            );
-            setTodos(newTodos);
-          } catch (err) {
-            console.log(err);
-          }
+          void handleUpsert();
           break;
         case "delete":
-          try {
-            await deleteTodo.mutateAsync({
-              id: todo.id,
-            });
-          } catch (err) {
-            console.log(err);
-          }
+          void handleDelete();
           break;
       }
     }
@@ -194,15 +205,12 @@ const TodoList: React.FC<TodoListProps> = ({
 
   return (
     <div className={styles.todoList}>
-      <InactivityTrigger
-        timeout={500}
-        onInactive={() => async () => await onInactive()}
-      />
+      <InactivityTrigger timeout={500} onInactive={() => onInactive()} />
       {loading && <div>Loading...</div>}
       {todos.map((todo, index) => (
         <div className={styles.todoItem} key={todo.id}>
           <div className={styles.checkContainer}>
-            <input type="checkbox" checked={todo.done} />
+            <input type="checkbox" checked={todo.done} onChange={() => null} />
             <span
               className={styles.checkmark}
               onClick={() => handleCheckboxChange(todo.id)}
