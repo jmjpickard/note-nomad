@@ -205,7 +205,7 @@ const TodoList: React.FC<TodoListProps> = ({
 
   return (
     <div className={styles.todoList}>
-      <InactivityTrigger timeout={500} onInactive={() => onInactive()} />
+      <InactivityTrigger timeout={2000} onInactive={() => onInactive()} />
       {loading && <div>Loading...</div>}
       {todos.map((todo, index) => (
         <div className={styles.todoItem} key={todo.id}>
