@@ -80,49 +80,50 @@ const TodoList: React.FC<TodoListProps> = ({
   };
 
   const onInactive = () => {
-    if (length === 0) {
-      return;
-    }
+    while (true) {
+      // Run indefinitely until the queue is empty
+      const todo = dequeue();
 
-    const todo = dequeue();
+      if (todo) {
+        const handleUpsert = async () => {
+          try {
+            const updatedTodo = await upsertTodo.mutateAsync({
+              id: todo.id,
+              title: todo.title,
+              date: todo.date,
+              content: todo.content ?? "",
+              done: todo.done,
+            });
 
-    if (todo) {
-      const handleUpsert = async () => {
-        try {
-          const updatedTodo = await upsertTodo.mutateAsync({
-            id: todo.id,
-            title: todo.title,
-            date: todo.date,
-            content: todo.content ?? "",
-            done: todo.done,
-          });
+            const newTodos = todos.map((existingTodo) =>
+              existingTodo.id === updatedTodo.id ? updatedTodo : existingTodo
+            );
+            setTodos(newTodos);
+          } catch (err) {
+            console.log(err);
+          }
+        };
 
-          const newTodos = todos.map((existingTodo) =>
-            existingTodo.id === updatedTodo.id ? updatedTodo : existingTodo
-          );
-          setTodos(newTodos);
-        } catch (err) {
-          console.log(err);
+        const handleDelete = async () => {
+          try {
+            await deleteTodo.mutateAsync({
+              id: todo.id,
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        };
+
+        switch (todo.action) {
+          case "upsert":
+            void handleUpsert();
+            break;
+          case "delete":
+            void handleDelete();
+            break;
         }
-      };
-
-      const handleDelete = async () => {
-        try {
-          await deleteTodo.mutateAsync({
-            id: todo.id,
-          });
-        } catch (err) {
-          console.log(err);
-        }
-      };
-
-      switch (todo.action) {
-        case "upsert":
-          void handleUpsert();
-          break;
-        case "delete":
-          void handleDelete();
-          break;
+      } else {
+        break; // Break the loop if the queue is empty
       }
     }
   };
