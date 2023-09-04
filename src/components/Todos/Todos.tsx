@@ -6,11 +6,16 @@ import { useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import InactivityTrigger from "../InactivityTrigger/InactivityTrigger";
 import { usePriorityQueue } from "../QueueContext/PriorityQueueContext";
+import { saveToDatabase } from "./utils";
+import { SaveStatus } from "~/pages/notes/[date]";
 
 interface TodoListProps {
   selectedDate: Date;
   data?: Todos[];
   loading: boolean;
+  saveStatus: SaveStatus;
+  setSaveStatus: React.Dispatch<React.SetStateAction<SaveStatus>>;
+  refetch: () => void;
 }
 
 interface TodoWithAction extends Todos {
@@ -22,6 +27,9 @@ const TodoList: React.FC<TodoListProps> = ({
   selectedDate,
   data,
   loading,
+  saveStatus,
+  setSaveStatus,
+  refetch,
 }: TodoListProps) => {
   const { enqueue, dequeue, length, queue } =
     usePriorityQueue<TodoWithAction>();
@@ -76,55 +84,6 @@ const TodoList: React.FC<TodoListProps> = ({
         ...updatedTodo,
         index: length + 1,
       });
-    }
-  };
-
-  const onInactive = () => {
-    while (true) {
-      // Run indefinitely until the queue is empty
-      const todo = dequeue();
-
-      if (todo) {
-        const handleUpsert = async () => {
-          try {
-            const updatedTodo = await upsertTodo.mutateAsync({
-              id: todo.id,
-              title: todo.title,
-              date: todo.date,
-              content: todo.content ?? "",
-              done: todo.done,
-            });
-
-            const newTodos = todos.map((existingTodo) =>
-              existingTodo.id === updatedTodo.id ? updatedTodo : existingTodo
-            );
-            setTodos(newTodos);
-          } catch (err) {
-            console.log(err);
-          }
-        };
-
-        const handleDelete = async () => {
-          try {
-            await deleteTodo.mutateAsync({
-              id: todo.id,
-            });
-          } catch (err) {
-            console.log(err);
-          }
-        };
-
-        switch (todo.action) {
-          case "upsert":
-            void handleUpsert();
-            break;
-          case "delete":
-            void handleDelete();
-            break;
-        }
-      } else {
-        break; // Break the loop if the queue is empty
-      }
     }
   };
 
@@ -204,9 +163,38 @@ const TodoList: React.FC<TodoListProps> = ({
     }
   };
 
+  React.useEffect(() => {
+    if (queue.length > 0) {
+      setSaveStatus("canSave");
+    }
+    if (saveStatus === "save") {
+      saveToDatabase({
+        todos,
+        setTodos,
+        dequeue,
+        upsertTodo,
+        deleteTodo,
+        refetch,
+      });
+      setSaveStatus("nothingToSave");
+    }
+  }, [saveStatus, todos]);
+
   return (
     <div className={styles.todoList}>
-      <InactivityTrigger timeout={2000} onInactive={() => onInactive()} />
+      <InactivityTrigger
+        timeout={10000}
+        onInactive={() =>
+          saveToDatabase({
+            todos,
+            setTodos,
+            dequeue,
+            upsertTodo,
+            deleteTodo,
+            refetch,
+          })
+        }
+      />
       {loading && <div>Loading...</div>}
       {todos.map((todo, index) => (
         <div className={styles.todoItem} key={todo.id}>

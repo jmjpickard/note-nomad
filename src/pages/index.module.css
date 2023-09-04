@@ -43,6 +43,35 @@
   width: 90%;
   height: 80vh;
 }
+
+.topRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  color: white;
+}
+
+.saveBox {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.saveButton {
+  padding: 10px 20px 10px 20px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  border: 1pt solid white;
+}
+
+.saveButton:hover {
+  font-weight: 600;
+  border: 1pt solid #7598b8;
+}
+
 .editor {
   width: 100%;
   outline: none;

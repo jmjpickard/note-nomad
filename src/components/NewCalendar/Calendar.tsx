@@ -57,7 +57,7 @@ export const SideCalendar: React.FC<CalendarProps> = ({
 
   useEffect(() => {
     setDays(buildDays(dayDiff, firstDayOfMonth, selectedDay));
-  }, [dayDiff, firstDayOfMonth]);
+  }, [dayDiff, firstDayOfMonth, selectedDay]);
 
   const handleArrowClick = (isForward: boolean) => {
     const newDate = isForward
