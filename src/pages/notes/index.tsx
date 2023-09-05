@@ -13,9 +13,7 @@ const Index = () => {
         // This code will be executed after the router push is complete
       };
 
-      handleRouterPush()
-        .then()
-        .catch((err) => console.log(err));
+      handleRouterPush().catch((err) => console.log(err));
     }
   }, [router]);
 
