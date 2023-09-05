@@ -7,9 +7,18 @@ const Index = () => {
   useEffect(() => {
     if (router.route === "/notes") {
       const today = new Date().toISOString().split("T")[0] || "";
-      (async () => {
-        await router.push(`/notes/${today}`);
-      })();
+      // Create an async function and immediately call it with try...catch
+      const handleRouterPush = async () => {
+        try {
+          await router.push(`/notes/${today}`);
+          // This code will be executed after the router push is complete
+        } catch (error) {
+          // Handle any potential errors here
+          console.error("Router push error:", error);
+        }
+      };
+
+      handleRouterPush();
     }
   }, [router]);
 
