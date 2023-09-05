@@ -88,7 +88,7 @@ const Notes = () => {
   const handleDayClick = (day: DaysProps) => {
     try {
       const updateSelectedDay = async () => {
-        router.push(`/notes/${formatDate(day.date)}`, undefined, {
+        await router.push(`/notes/${formatDate(day.date) || ""}`, undefined, {
           shallow: true,
         });
         await refetch();
@@ -149,6 +149,7 @@ const Notes = () => {
                   loading={todosLoading}
                   saveStatus={saveStatus}
                   setSaveStatus={setSaveStatus}
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   refetch={refetch}
                 />
               </div>
