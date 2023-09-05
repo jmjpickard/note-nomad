@@ -6,11 +6,12 @@ const Index = () => {
 
   useEffect(() => {
     if (router.route === "/notes") {
-      // Redirect to today's date when the URL is just /notes
-      const today = new Date().toISOString().split("T")[0];
-      router.push(`/notes/${today}`);
+      const today = new Date().toISOString().split("T")[0] || "";
+      (async () => {
+        await router.push(`/notes/${today}`);
+      })();
     }
-  }, []);
+  }, [router]);
 
   return null;
 };
