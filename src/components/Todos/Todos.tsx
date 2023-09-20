@@ -50,6 +50,7 @@ const TodoList: React.FC<TodoListProps> = ({
             updatedAt: new Date(),
             content: "",
             done: false,
+            order: 0,
           },
         ]);
       } else {
@@ -113,51 +114,51 @@ const TodoList: React.FC<TodoListProps> = ({
     id: string,
     index: number
   ) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const todo = todos.find((todo) => todo.id === id);
-      if (todo) {
-        const updatedTodo = { ...todo, content: e.currentTarget.value };
-        setTodos((todos) => {
-          const updatedTodos = todos.map((todo) =>
-            todo.id === id ? updatedTodo : todo
-          );
-          return updatedTodos;
-        });
-        enqueue({
-          action: "upsert",
-          ...updatedTodo,
-          index: length + 1,
-        });
-        if (index === todos.length - 1) {
-          setFocusIndex(index + 1);
-          setTodos((todos) => [
-            ...todos,
-            {
-              id: cuid(),
-              title: "",
-              userId: session?.data?.user.id ?? "",
-              date: selectedDate,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              content: "",
-              done: false,
-            },
-          ]);
-        }
+    const todo = todos.find((todo) => todo.id === id);
+    if (todo) {
+      const updatedTodo = { ...todo, content: e.currentTarget.value };
+      setTodos((todos) => {
+        const updatedTodos = todos.map((todo) =>
+          todo.id === id ? updatedTodo : todo
+        );
+        return updatedTodos;
+      });
+      enqueue({
+        action: "upsert",
+        ...updatedTodo,
+        index: length + 1,
+      });
+      if (e.key === "Enter") {
+        e.preventDefault();
+        setTodos((todos) => [
+          ...todos,
+          {
+            id: cuid(),
+            title: "",
+            userId: session?.data?.user.id ?? "",
+            date: selectedDate,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            content: "",
+            done: false,
+            order: index + 1,
+          },
+        ]);
+        setFocusIndex(index + 1);
       }
-    }
-    if (e.key === "Backspace") {
-      if (e.currentTarget.value.length === 0) {
-        setTodos(todos.filter((t) => t.id !== id));
-        setFocusIndex(index - 1);
-        const todo = todos.find((todo) => todo.id === id);
-        if (todo) {
-          enqueue({
-            action: "delete",
-            ...todo,
-            index: length + 1,
-          });
+      if (e.key === "Backspace") {
+        if (e.currentTarget.value.length === 0) {
+          setTodos(todos.filter((t) => t.id !== id));
+          setFocusIndex(index - 1);
+          inputRefs.current.splice(index, 1);
+          const todo = todos.find((todo) => todo.id === id);
+          if (todo) {
+            enqueue({
+              action: "delete",
+              ...todo,
+              index: length + 1,
+            });
+          }
         }
       }
     }
@@ -181,7 +182,37 @@ const TodoList: React.FC<TodoListProps> = ({
   }, [saveStatus, todos]);
 
   return (
-    <div className={styles.todoList}>
+    <>
+      <div className={styles.todoList}>
+        {loading && <div>Loading...</div>}
+        {todos
+          .sort((a, b) => (a.order > b.order ? 1 : 0))
+          .map((todo, index) => (
+            <div className={styles.todoItem} key={todo.id}>
+              <div className={styles.checkContainer}>
+                <input
+                  type="checkbox"
+                  checked={todo.done}
+                  onChange={() => null}
+                />
+                <span
+                  className={styles.checkmark}
+                  onClick={() => handleCheckboxChange(todo.id)}
+                ></span>
+              </div>
+              <input
+                type="text"
+                value={todo.content ?? ""}
+                onChange={(e) => handleInputChange(e, todo.id)}
+                onKeyDown={(e) => handleKeyPress(e, todo.id, index)}
+                className={styles.textInput}
+                ref={(ref) => {
+                  inputRefs.current[index] = ref as HTMLInputElement;
+                }}
+              />
+            </div>
+          ))}
+      </div>
       <InactivityTrigger
         timeout={10000}
         onInactive={() =>
@@ -195,29 +226,7 @@ const TodoList: React.FC<TodoListProps> = ({
           })
         }
       />
-      {loading && <div>Loading...</div>}
-      {todos.map((todo, index) => (
-        <div className={styles.todoItem} key={todo.id}>
-          <div className={styles.checkContainer}>
-            <input type="checkbox" checked={todo.done} onChange={() => null} />
-            <span
-              className={styles.checkmark}
-              onClick={() => handleCheckboxChange(todo.id)}
-            ></span>
-          </div>
-          <input
-            type="text"
-            value={todo.content ?? ""}
-            onChange={(e) => handleInputChange(e, todo.id)}
-            onKeyDown={(e) => handleKeyPress(e, todo.id, index)}
-            className={styles.textInput}
-            ref={(ref) => {
-              inputRefs.current[index] = ref as HTMLInputElement;
-            }}
-          />
-        </div>
-      ))}
-    </div>
+    </>
   );
 };
 

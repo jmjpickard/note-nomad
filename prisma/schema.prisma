@@ -71,6 +71,7 @@ model Todos {
     title     String
     content   String?
     done      Boolean  @default(false)
+    order     Int      @default(0)
     userId    String
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

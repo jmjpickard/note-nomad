@@ -44,10 +44,11 @@ export const todoRouter = createTRPCRouter({
         title: z.string(),
         content: z.string(),
         done: z.boolean(),
+        order: z.number(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const { id, date, title, content, done } = input;
+      const { id, date, title, content, done, order } = input;
       return await ctx.prisma.todos.upsert({
         where: {
           id,
@@ -57,6 +58,7 @@ export const todoRouter = createTRPCRouter({
           title,
           content,
           done,
+          order,
           updatedAt: new Date(),
         },
         create: {
@@ -65,6 +67,7 @@ export const todoRouter = createTRPCRouter({
           content,
           done,
           date,
+          order,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

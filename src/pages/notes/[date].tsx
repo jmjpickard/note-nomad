@@ -82,7 +82,7 @@ const Notes = () => {
     isLoading: todosLoading,
     refetch,
   } = api.todo.getTodosByUserIdAndDate.useQuery({
-    date: new Date(dateFormatted) ?? new Date(),
+    date: date ? new Date(dateFormatted) : new Date(),
   });
 
   const handleDayClick = (day: DaysProps) => {
@@ -149,7 +149,7 @@ const Notes = () => {
                   loading={todosLoading}
                   saveStatus={saveStatus}
                   setSaveStatus={setSaveStatus}
-                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promisesVERCEL_URL
                   refetch={refetch}
                 />
               </div>

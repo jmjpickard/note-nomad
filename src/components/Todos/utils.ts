@@ -24,7 +24,6 @@ export const saveToDatabase = ({
   refetch,
 }: SaveToDatabaseProps) => {
   while (true) {
-    // Run indefinitely until the queue is empty
     const todo = dequeue();
 
     if (todo) {
@@ -36,6 +35,7 @@ export const saveToDatabase = ({
             date: todo.date,
             content: todo.content ?? "",
             done: todo.done,
+            order: todo.order,
           });
 
           const newTodos = todos.map((existingTodo) =>
