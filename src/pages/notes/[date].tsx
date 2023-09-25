@@ -68,6 +68,14 @@ const getLastSaved = (todos: Todos[] | undefined) => {
   }
 };
 
+function formatDateWithoutTime(inputDate: Date): Date {
+  const year = inputDate.getFullYear();
+  const month = inputDate.getMonth();
+  const day = inputDate.getDate();
+
+  return new Date(year, month, day);
+}
+
 const Notes = () => {
   const router = useRouter();
   const { date } = router.query;
@@ -83,6 +91,14 @@ const Notes = () => {
     refetch,
   } = api.todo.getTodosByUserIdAndDate.useQuery({
     date: date ? new Date(dateFormatted) : new Date(),
+  });
+
+  const {
+    data: notes,
+    isLoading: notesLoading,
+    refetch: fetchNotes,
+  } = api.notes.getNoteByDate.useQuery({
+    date: date ? dateFormattedAsDate : formatDateWithoutTime(new Date()),
   });
 
   const handleDayClick = (day: DaysProps) => {
@@ -156,7 +172,14 @@ const Notes = () => {
               <div className={styles.markdownItem}>
                 <div>Notes</div>
                 <div className={styles.editor}>
-                  <TextEditor />
+                  <TextEditor
+                    notes={notes}
+                    notesLoading={notesLoading}
+                    refetch={fetchNotes}
+                    saveStatus={saveStatus}
+                    setSaveStatus={setSaveStatus}
+                    selectedDate={dateFormattedAsDate}
+                  />
                 </div>
               </div>
             </div>
