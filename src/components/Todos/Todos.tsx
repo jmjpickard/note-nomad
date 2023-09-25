@@ -163,7 +163,6 @@ const TodoList: React.FC<TodoListProps> = ({
       }
       if ((e.ctrlKey || e.metaKey) && e.key === "s") {
         e.preventDefault();
-        console.log("hello");
         setSaveStatus("save");
       }
     }

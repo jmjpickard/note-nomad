@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import { TextEditor } from "../../components/Editor/TextEditor";
 import { NavBar } from "../../components/Nav/Nav";
 import { DaysProps, SideCalendar } from "../../components/NewCalendar/Calendar";
@@ -69,7 +68,6 @@ const getLastSaved = (
     const updatedAt = lastSavedSort[0]?.updatedAt;
     if (updatedAt) {
       const todoSooner = updatedAt > notes.updatedAt;
-      console.log({ updatedAt, todoSooner });
       return todoSooner
         ? getTimeDifference(updatedAt)
         : getTimeDifference(notes.updatedAt);
@@ -135,7 +133,6 @@ const Notes = () => {
   const [lastSaved, setLastSaved] = React.useState<string | undefined>(
     getLastSaved(todos, notes)
   );
-  console.log({ lastSaved, notes });
 
   React.useEffect(() => {
     setLastSaved(getLastSaved(todos, notes));
