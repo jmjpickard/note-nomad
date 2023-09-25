@@ -8,7 +8,7 @@ import React from "react";
 import { api } from "~/utils/api";
 import { PriorityQueueProvider } from "../../components/QueueContext/PriorityQueueContext";
 import { useRouter } from "next/router";
-import { Todos } from "@prisma/client";
+import { Notes, Todos } from "@prisma/client";
 
 export type SaveStatus = "save" | "canSave" | "nothingToSave";
 
@@ -58,13 +58,29 @@ const getTimeDifference = (inputDate: Date): string => {
   }
 };
 
-const getLastSaved = (todos: Todos[] | undefined) => {
+const getLastSaved = (
+  todos: Todos[] | undefined,
+  notes: Notes | null | undefined
+) => {
   const lastSavedSort = todos?.sort(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   );
+  if (lastSavedSort && notes) {
+    const updatedAt = lastSavedSort[0]?.updatedAt;
+    if (updatedAt) {
+      const todoSooner = updatedAt > notes.updatedAt;
+      console.log({ updatedAt, todoSooner });
+      return todoSooner
+        ? getTimeDifference(updatedAt)
+        : getTimeDifference(notes.updatedAt);
+    }
+  }
   if (lastSavedSort) {
     const updatedAt = lastSavedSort[0]?.updatedAt;
     return updatedAt ? getTimeDifference(new Date(updatedAt)) : "";
+  }
+  if (notes) {
+    return getTimeDifference(notes.updatedAt);
   }
 };
 
@@ -117,16 +133,17 @@ const Notes = () => {
   };
 
   const [lastSaved, setLastSaved] = React.useState<string | undefined>(
-    getLastSaved(todos)
+    getLastSaved(todos, notes)
   );
+  console.log({ lastSaved, notes });
 
   React.useEffect(() => {
-    setLastSaved(getLastSaved(todos));
+    setLastSaved(getLastSaved(todos, notes));
     const timer = setTimeout(() => {
-      setLastSaved(getLastSaved(todos));
+      setLastSaved(getLastSaved(todos, notes));
     }, 60000);
     return () => clearTimeout(timer);
-  }, [todos]);
+  }, [todos, notes]);
 
   return (
     <PriorityQueueProvider>
