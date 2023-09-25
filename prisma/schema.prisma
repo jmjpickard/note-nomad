@@ -53,6 +53,7 @@ model User {
     sessions      Session[]
     Todos         Todos[]
     Notes         Notes[]
+    Tags          Tags[]
 }
 
 model VerificationToken {
@@ -74,6 +75,7 @@ model Todos {
     order     Int      @default(0)
     userId    String
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Tags      Tags[]
 }
 
 model Notes {
@@ -84,4 +86,18 @@ model Notes {
     content   String?
     userId    String
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Tags      Tags[]
+}
+
+model Tags {
+    id        String   @id @default(cuid())
+    name      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    noteId    String?
+    todosId   String?
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    notes     Notes?   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+    todos     Todos?   @relation(fields: [todosId], references: [id], onDelete: Cascade)
 }

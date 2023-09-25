@@ -182,7 +182,7 @@ const Notes = () => {
                   loading={todosLoading}
                   saveStatus={saveStatus}
                   setSaveStatus={setSaveStatus}
-                  // eslint-disable-next-line @typescript-eslint/no-misused-promisesVERCEL_URL
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   refetch={refetch}
                 />
               </div>
@@ -192,6 +192,7 @@ const Notes = () => {
                   <TextEditor
                     notes={notes}
                     notesLoading={notesLoading}
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     refetch={fetchNotes}
                     saveStatus={saveStatus}
                     setSaveStatus={setSaveStatus}

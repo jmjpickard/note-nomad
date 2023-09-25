@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Tags" ALTER COLUMN "noteId" DROP NOT NULL,
+ALTER COLUMN "todosId" DROP NOT NULL;
