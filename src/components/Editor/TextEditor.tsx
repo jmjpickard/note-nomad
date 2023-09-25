@@ -49,14 +49,27 @@ export const MilkdownEditor: FC<EditorProps> = ({
 
   const upsertNote = api.notes.upsertNote.useMutation();
 
-  React.useEffect(() => {
-    if (saveStatus === "save") {
-      upsertNote.mutateAsync({
+  const saveData = async () => {
+    try {
+      const upsertResult = await upsertNote.mutateAsync({
         date: selectedDate,
         id: notes?.id ?? "",
         content,
       });
+
+      // Assuming refetch returns a Promise, await it as well
       refetch();
+      return upsertResult;
+
+      // Use upsertResult or refetched data here if needed
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  React.useEffect(() => {
+    if (saveStatus === "save") {
+      saveData().catch((err) => console.log(err));
     }
   }, [saveStatus]);
 
