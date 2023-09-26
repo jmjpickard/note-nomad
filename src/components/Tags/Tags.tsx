@@ -136,7 +136,7 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
         >
           <div onClick={handleCloseModal}>X</div>
           <input onChange={(e) => setTagName(e.target.value)} />
-          <button onClick={() => handleCreateTag}>Create tag</button>
+          <button onClick={handleCreateTag}>Create tag</button>
         </div>
       )}
     </>
