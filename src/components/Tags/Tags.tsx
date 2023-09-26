@@ -36,7 +36,7 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
     }
   };
 
-  const handleMouseHover = (tagId: string | null) => {
+  const handleMouseHover = (tagId: string) => {
     const tagElement = document.getElementById(`tag-${tagId}`);
     if (tagElement) {
       setHoveredTag(tagId);
@@ -53,20 +53,31 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
     setSelectedTag(null);
   };
 
-  const handleCreateTag = () => {
-    createTag.mutateAsync(
-      {
+  const handleCreateTag = async () => {
+    try {
+      const result = await createTag.mutateAsync({
         date,
         name: tagName,
-      },
-      { onSuccess: () => refetch() }
-    );
-    handleCloseModal();
+      });
+      if (result) {
+        await refetch();
+        handleCloseModal();
+      }
+    } catch (error) {
+      console.error("Error creating tag:", error);
+    }
   };
 
-  const handleDeleteTag = (tagId: string) => {
-    deleteTag.mutateAsync({ id: tagId }, { onSuccess: () => refetch() });
-    handleCloseModal();
+  const handleDeleteTag = async (tagId: string) => {
+    try {
+      const result = await deleteTag.mutateAsync({ id: tagId });
+      if (result) {
+        await refetch();
+        handleCloseModal();
+      }
+    } catch (error) {
+      console.error("Error deleting tag:", error);
+    }
   };
 
   return (
@@ -92,7 +103,7 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
             {data.map((tag) => (
               <div
                 className={styles.tag}
-                key={`tag-${tag.id}`}
+                key={`tag-${tag.id ? tag.id : ""}`}
                 id={`tag-${tag.id}`}
                 onMouseEnter={() => handleMouseHover(tag.id)}
                 onMouseLeave={() => setHoveredTag(null)}
@@ -107,7 +118,7 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
                     }}
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent the click from triggering the tag click
-                      handleDeleteTag(tag.id);
+                      handleDeleteTag(tag.id).catch((err) => console.log(err));
                     }}
                   >
                     X
@@ -125,7 +136,7 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
         >
           <div onClick={handleCloseModal}>X</div>
           <input onChange={(e) => setTagName(e.target.value)} />
-          <button onClick={handleCreateTag}>Create tag</button>
+          <button onClick={() => handleCreateTag}>Create tag</button>
         </div>
       )}
     </>
