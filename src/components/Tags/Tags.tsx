@@ -53,31 +53,35 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
     setSelectedTag(null);
   };
 
-  const handleCreateTag = async () => {
-    try {
-      const result = await createTag.mutateAsync({
+  const handleCreateTag = () => {
+    createTag
+      .mutateAsync({
         date,
         name: tagName,
+      })
+      .then(async (result) => {
+        if (result) {
+          await refetch();
+          handleCloseModal();
+        }
+      })
+      .catch((error) => {
+        console.error("Error creating tag:", error);
       });
-      if (result) {
-        await refetch();
-        handleCloseModal();
-      }
-    } catch (error) {
-      console.error("Error creating tag:", error);
-    }
   };
 
-  const handleDeleteTag = async (tagId: string) => {
-    try {
-      const result = await deleteTag.mutateAsync({ id: tagId });
-      if (result) {
-        await refetch();
-        handleCloseModal();
-      }
-    } catch (error) {
-      console.error("Error deleting tag:", error);
-    }
+  const handleDeleteTag = (tagId: string) => {
+    deleteTag
+      .mutateAsync({ id: tagId })
+      .then(async (result) => {
+        if (result) {
+          await refetch();
+          handleCloseModal();
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting tag:", error);
+      });
   };
 
   return (
@@ -118,7 +122,7 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
                     }}
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent the click from triggering the tag click
-                      handleDeleteTag(tag.id).catch((err) => console.log(err));
+                      handleDeleteTag(tag.id);
                     }}
                   >
                     X
