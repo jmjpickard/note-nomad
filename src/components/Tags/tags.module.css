@@ -16,13 +16,22 @@
 }
 
 .deleteButton {
-  position: relative;
-  top: 5px;
-  right: 5px;
+  position: absolute;
   cursor: pointer;
-  color: red;
+  color: white;
+  background-color: #465c70;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
   font-size: 12px;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.deleteButton:hover {
+  background-color: #7598b8;
 }
 
 .tagModal {

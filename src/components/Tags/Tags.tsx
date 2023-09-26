@@ -19,6 +19,7 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const [tagName, setTagName] = useState("");
   const [hoveredTag, setHoveredTag] = useState<string | null>(null);
+  const [hoveredPosition, setHoveredPosition] = useState({ top: 0, left: 0 });
 
   const handleClick = (tagId: string) => {
     setShow(!show);
@@ -31,6 +32,18 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
       setModalPosition({
         top: rect.bottom + window.scrollY,
         left: rect.left + window.scrollX,
+      });
+    }
+  };
+
+  const handleMouseHover = (tagId: string | null) => {
+    const tagElement = document.getElementById(`tag-${tagId}`);
+    if (tagElement) {
+      setHoveredTag(tagId);
+      const rect = tagElement.getBoundingClientRect();
+      setHoveredPosition({
+        top: rect.top - window.scrollY - 7,
+        left: rect.left - window.scrollX,
       });
     }
   };
@@ -55,7 +68,6 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
     deleteTag.mutateAsync({ id: tagId }, { onSuccess: () => refetch() });
     handleCloseModal();
   };
-  console.log({ hoveredTag });
 
   return (
     <>
@@ -82,13 +94,17 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
                 className={styles.tag}
                 key={`tag-${tag.id}`}
                 id={`tag-${tag.id}`}
-                onMouseEnter={() => setHoveredTag(tag.id)}
+                onMouseEnter={() => handleMouseHover(tag.id)}
                 onMouseLeave={() => setHoveredTag(null)}
               >
                 {tag.name}
                 {hoveredTag === tag.id && (
                   <div
                     className={styles.deleteButton}
+                    style={{
+                      top: hoveredPosition.top,
+                      left: hoveredPosition.left,
+                    }}
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent the click from triggering the tag click
                       handleDeleteTag(tag.id);
