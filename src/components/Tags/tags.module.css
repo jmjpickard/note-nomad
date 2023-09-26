@@ -1,0 +1,42 @@
+.tagsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.tag {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #7598b8;
+}
+
+.tag:hover {
+  background-color: #465c70;
+}
+
+.deleteButton {
+  position: relative;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  color: red;
+  font-size: 12px;
+  z-index: 1;
+}
+
+.tagModal {
+  position: absolute; /* Position the modal absolutely */
+  z-index: 1;
+  background-color: #7598b8;
+  border-radius: 8px;
+  width: 200px;
+  padding: 20px;
+  top: 0; /* These will be overridden by JavaScript */
+  left: 0; /* These will be overridden by JavaScript */
+}
+
+/* Add hover styles for the tagModal */
+.tag:hover + .tagModal {
+  display: block; /* Show the modal when the tag is hovered */
+}

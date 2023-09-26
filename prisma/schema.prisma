@@ -87,17 +87,18 @@ model Notes {
     userId    String
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     Tags      Tags[]
+
+    @@unique([userId, date])
 }
 
 model Tags {
     id        String   @id @default(cuid())
     name      String
+    date      DateTime
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    noteId    String?
-    todosId   String?
     userId    String
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    notes     Notes?   @relation(fields: [noteId], references: [id], onDelete: Cascade)
-    todos     Todos?   @relation(fields: [todosId], references: [id], onDelete: Cascade)
+    notes     Notes?   @relation(fields: [userId, date], references: [userId, date], onDelete: Cascade, map: "tags_notes_userId_date_fkey")
+    todos     Todos[]
 }

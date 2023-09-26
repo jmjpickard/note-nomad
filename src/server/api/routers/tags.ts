@@ -6,14 +6,14 @@ export const tagsRouter = createTRPCRouter({
   getTags: protectedProcedure
     .input(
       z.object({
-        notesId: z.string().optional(),
-        todosId: z.string().optional(),
+        date: z.date(),
       })
     )
     .query(async ({ input, ctx }) => {
       return await ctx.prisma.tags.findMany({
         where: {
-          OR: [{ noteId: input.notesId }, { todosId: input.todosId }],
+          date: input.date,
+          userId: ctx.session.user.id,
         },
       });
     }),
@@ -22,16 +22,14 @@ export const tagsRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-        noteId: z.string(),
-        todosId: z.string(),
+        date: z.date(),
       })
     )
     .mutation(({ input, ctx }) => {
       return ctx.prisma.tags.create({
         data: {
           name: input.name,
-          noteId: input.noteId,
-          todosId: input.todosId,
+          date: input.date,
           userId: ctx.session.user.id,
         },
       });

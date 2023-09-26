@@ -8,6 +8,7 @@ import { api } from "~/utils/api";
 import { PriorityQueueProvider } from "../../components/QueueContext/PriorityQueueContext";
 import { useRouter } from "next/router";
 import { Notes, Todos } from "@prisma/client";
+import { Tags } from "~/components/Tags/Tags";
 
 export type SaveStatus = "save" | "canSave" | "nothingToSave";
 
@@ -156,18 +157,21 @@ const Notes = () => {
               <div className={styles.dayTitle}>
                 {getDayString(dateFormattedAsDate)}
               </div>
-              <div className={styles.saveBox}>
-                {saveStatus === "canSave" && (
-                  <div>
-                    <button
-                      className={styles.saveButton}
-                      onClick={() => setSaveStatus("save")}
-                    >
-                      Save
-                    </button>
-                  </div>
-                )}
-                {lastSaved && <div>Last saved: {lastSaved}</div>}
+              <div className={styles.tagsAndSaveBox}>
+                <Tags date={dateFormattedAsDate} />
+                <div className={styles.saveBox}>
+                  {saveStatus === "canSave" && (
+                    <div>
+                      <button
+                        className={styles.saveButton}
+                        onClick={() => setSaveStatus("save")}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  )}
+                  {lastSaved && <div>Last saved: {lastSaved}</div>}
+                </div>
               </div>
             </div>
             <div className={styles.markdownContent}>

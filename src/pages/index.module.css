@@ -119,3 +119,9 @@
   background-color: #465c70;
   border: 2pt solid #7598b8;
 }
+
+.tagsAndSaveBox {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
