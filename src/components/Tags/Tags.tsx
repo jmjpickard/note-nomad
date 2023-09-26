@@ -54,6 +54,7 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
   };
 
   const handleCreateTag = () => {
+    handleCloseModal();
     createTag
       .mutateAsync({
         date,
@@ -62,7 +63,6 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
       .then(async (result) => {
         if (result) {
           await refetch();
-          handleCloseModal();
         }
       })
       .catch((error) => {
@@ -71,12 +71,12 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
   };
 
   const handleDeleteTag = (tagId: string) => {
+    handleCloseModal();
     deleteTag
       .mutateAsync({ id: tagId })
       .then(async (result) => {
         if (result) {
           await refetch();
-          handleCloseModal();
         }
       })
       .catch((error) => {
