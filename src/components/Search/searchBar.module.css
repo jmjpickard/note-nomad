@@ -1,0 +1,82 @@
+/* SearchBar.module.css */
+
+/* Base styles for the input field */
+.searchContainer {
+  position: relative;
+}
+
+.searchInput {
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-bottom: 2px solid #7598b8;
+  border-radius: 3px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #37638c;
+  color: white;
+}
+
+.searchInput:focus {
+  border-color: #465c70;
+}
+
+/* Modal styles */
+.modal {
+  position: relative;
+  top: calc(100% + 0px); /* Position just below the initial input */
+  left: 0;
+  background-color: #37638c;
+  opacity: 0.97;
+  padding: 20px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  z-index: 1000;
+  width: 90%;
+  margin-right: 2rem;
+}
+
+/* Close button */
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #37638c;
+}
+
+.closeButton:hover {
+  color: #465c70;
+}
+
+/* Filter options */
+.filterOptions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.filterButton {
+  background-color: #7598b8;
+  border-radius: 50px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  min-width: 80px;
+}
+
+.filterButton:hover {
+  background-color: #5888b4;
+}
+
+.searchHeader {
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+}

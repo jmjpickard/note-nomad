@@ -9,6 +9,7 @@ import { PriorityQueueProvider } from "../../components/QueueContext/PriorityQue
 import { useRouter } from "next/router";
 import { Notes, Todos } from "@prisma/client";
 import { Tags } from "~/components/Tags/Tags";
+import SearchBar from "~/components/Search/SearchBar";
 
 export type SaveStatus = "save" | "canSave" | "nothingToSave";
 
