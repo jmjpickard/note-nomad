@@ -191,6 +191,7 @@ const Notes = () => {
                 <div>Notes</div>
                 <div className={styles.editor}>
                   <TextEditor
+                    key={dateFormattedAsDate.toString()}
                     notes={notes}
                     notesLoading={notesLoading}
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises

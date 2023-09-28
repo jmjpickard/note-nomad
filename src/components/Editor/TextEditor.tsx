@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import type { FC } from "react";
 
 import {
@@ -57,11 +57,8 @@ export const MilkdownEditor: FC<EditorProps> = ({
         content,
       });
 
-      // Assuming refetch returns a Promise, await it as well
       refetch();
       return upsertResult;
-
-      // Use upsertResult or refetched data here if needed
     } catch (err) {
       console.log(err);
     }
@@ -83,6 +80,7 @@ export const MilkdownEditor: FC<EditorProps> = ({
             component: SlashView,
           }),
         });
+
         ctx.get(listenerCtx).markdownUpdated((ctx, markdown, prevMarkdown) => {
           if (prevMarkdown !== markdown) {
             setSaveStatus("canSave");
