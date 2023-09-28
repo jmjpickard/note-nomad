@@ -138,9 +138,18 @@ export const Tags: FC<TagsProps> = ({ date }: TagsProps) => {
           className={styles.tagModal}
           style={{ top: modalPosition.top, left: modalPosition.left }}
         >
-          <div onClick={handleCloseModal}>X</div>
-          <input onChange={(e) => setTagName(e.target.value)} />
-          <button onClick={handleCreateTag}>Create tag</button>
+          <div className={styles.tagContent}>
+            <div className={styles.tagExit} onClick={handleCloseModal}>
+              X
+            </div>
+            <input
+              className={styles.tagInput}
+              onChange={(e) => setTagName(e.target.value)}
+            />
+            <button className={styles.tagButton} onClick={handleCreateTag}>
+              Create tag
+            </button>
+          </div>
         </div>
       )}
     </>
