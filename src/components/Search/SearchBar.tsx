@@ -1,11 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import styles from "./SearchBar.module.css";
 
-interface SearchBarProps {
-  // Define any props you need here
-}
-
-const SearchBar: React.FC<SearchBarProps> = () => {
+const SearchBar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterText, setFilterText] = useState("");
   const [selectedTimeFrame, setSelectedTimeFrame] = useState("");
