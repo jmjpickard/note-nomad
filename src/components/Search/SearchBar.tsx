@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import styles from "./SearchBar.module.css";
+import styles from "./searchBar.module.css";
 
 const SearchBar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
