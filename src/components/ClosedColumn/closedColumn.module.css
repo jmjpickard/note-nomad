@@ -1,0 +1,37 @@
+.main {
+  background-color: #37638c;
+  width: 50px;
+  border-radius: 6px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 10px;
+}
+
+.text {
+  color: white;
+  rotate: -90deg;
+}
+
+.arrow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #7598b8;
+  font-size: 20px;
+  font-weight: 300;
+  background-color: white;
+  border-radius: 50%;
+  width: 25px;
+  padding-bottom: 2px;
+}
+
+.arrow:hover {
+  background-color: #7598b8;
+  color: white;
+}

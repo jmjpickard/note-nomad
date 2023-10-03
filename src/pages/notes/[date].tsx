@@ -9,7 +9,9 @@ import { PriorityQueueProvider } from "../../components/QueueContext/PriorityQue
 import { useRouter } from "next/router";
 import { Notes, Todos } from "@prisma/client";
 import { Tags } from "~/components/Tags/Tags";
-import SearchBar from "~/components/Search/SearchBar";
+import { ClosedColumn } from "~/components/ClosedColumn/ClosedColumn";
+import clx from "classnames";
+import CodeEditor from "~/components/CodeEditor/CodeEditor";
 
 export type SaveStatus = "save" | "canSave" | "nothingToSave";
 
@@ -97,6 +99,9 @@ const Notes = () => {
   const { date } = router.query;
   const dateFormatted = date as string;
   const dateFormattedAsDate = new Date(dateFormatted);
+  const [openTodos, setOpenTodos] = React.useState(true);
+  const [openNotes, setOpenNotes] = React.useState(true);
+  const [openCode, setOpenCode] = React.useState(true);
 
   const [saveStatus, setSaveStatus] =
     React.useState<SaveStatus>("nothingToSave");
@@ -147,7 +152,8 @@ const Notes = () => {
   return (
     <PriorityQueueProvider>
       <div className={styles.notesMain}>
-        <NavBar />
+        <NavBar showSearch />
+
         <div className={styles.notesContainer}>
           <SideCalendar
             onEventClick={(day) => handleDayClick(day)}
@@ -176,33 +182,75 @@ const Notes = () => {
               </div>
             </div>
             <div className={styles.markdownContent}>
-              <div className={styles.markdownItem}>
-                <div>Your todos</div>
-                <TodoList
-                  selectedDate={dateFormattedAsDate}
-                  data={todos}
-                  loading={todosLoading}
-                  saveStatus={saveStatus}
-                  setSaveStatus={setSaveStatus}
-                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                  refetch={refetch}
-                />
-              </div>
-              <div className={styles.markdownItem}>
-                <div>Notes</div>
-                <div className={styles.editor}>
-                  <TextEditor
-                    key={dateFormattedAsDate.toString()}
-                    notes={notes}
-                    notesLoading={notesLoading}
-                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                    refetch={fetchNotes}
+              {openTodos ? (
+                <div className={clx(styles.markdownItem, styles.todos)}>
+                  <div className={styles.segmentContainer}>
+                    <div>Your todos</div>
+                    <div
+                      className={styles.arrow}
+                      onClick={() => setOpenTodos(!openTodos)}
+                    >
+                      {"<"}
+                    </div>
+                  </div>
+                  <TodoList
+                    selectedDate={dateFormattedAsDate}
+                    data={todos}
+                    loading={todosLoading}
                     saveStatus={saveStatus}
                     setSaveStatus={setSaveStatus}
-                    selectedDate={dateFormattedAsDate}
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    refetch={refetch}
                   />
                 </div>
-              </div>
+              ) : (
+                <ClosedColumn title="Todos" setOpen={setOpenTodos} />
+              )}
+              {openNotes ? (
+                <div className={clx(styles.markdownItem, styles.notes)}>
+                  <div className={styles.segmentContainer}>
+                    <div>Notes</div>
+                    <div
+                      className={styles.arrow}
+                      onClick={() => setOpenNotes(!openNotes)}
+                    >
+                      {"<"}
+                    </div>
+                  </div>
+                  <div className={styles.editor}>
+                    <TextEditor
+                      key={dateFormattedAsDate.toString()}
+                      notes={notes}
+                      notesLoading={notesLoading}
+                      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                      refetch={fetchNotes}
+                      saveStatus={saveStatus}
+                      setSaveStatus={setSaveStatus}
+                      selectedDate={dateFormattedAsDate}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <ClosedColumn title="Notes" setOpen={setOpenNotes} />
+              )}
+              {openCode ? (
+                <div className={clx(styles.markdownItem, styles.code)}>
+                  <div className={styles.segmentContainer}>
+                    <div>Code</div>
+                    <div
+                      className={styles.arrow}
+                      onClick={() => setOpenCode(!openCode)}
+                    >
+                      {"<"}
+                    </div>
+                  </div>
+                  <div className={styles.editor}>
+                    <CodeEditor />
+                  </div>
+                </div>
+              ) : (
+                <ClosedColumn title="Code" setOpen={setOpenCode} />
+              )}
             </div>
           </div>
         </div>

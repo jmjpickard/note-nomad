@@ -18,3 +18,10 @@ a {
 .editorMain {
   outline: none;
 }
+
+:root {
+  --breakpoint-small: 576px;
+  --breakpoint-medium: 768px;
+  --breakpoint-large: 992px;
+  --breakpoint-extra-large: 1200px;
+}
